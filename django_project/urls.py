@@ -1,5 +1,7 @@
 """django_project URL Configuration
 
+### CODIGO EN LA SHELL PA PUSH: git push origin main
+
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:

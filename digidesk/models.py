@@ -1,5 +1,7 @@
 from django.db import models
 
+
+### CODIGO EN LA SHELL PA PUSH: git push origin main
 # Create your models here.
 class Digimon(models.Model):
   name = models.CharField(max_length = 128, help_text = " Ingrese el nombre del Digimon: ")
