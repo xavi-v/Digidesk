@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Digimons</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+  
+  <div class="container">
+    <div class= "row">
+      <div class="col">
+        <h1> DigiDesk </h1>
+        
+        <h4>Revisa y baja la info de tu Digimón favorito</h4>        
+        <h5>Digimon (デジモン Dejimon?), término tomado de Digital Monsters (デジタルモンスター  <em>Dejitaru</em>  <em>monsutā</em>) <br> literalmente en español Monstruos Digitales, estilizado como <b>DIGIMON</b>.<br> Es una franquicia de medios creado por Akiyoshi Hongo</h5>  
+      
+
+       
+      </div>
+    </div>
+    
+    <div class="row justify-content-center" id="previews">
+      <div class="col-3 bg-warning py-3">
+        <div id="carouselExample" class="carousel slide">
+          <div class="carousel-inner">           
+          </div>
+          <button class="carousel-control-prev btn" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon btn btn-outline-dark" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next btnbtn-outline-danger" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon btn btn-dark" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>  
+    </div>
+    <div class="p-3 mb-2 bg-info text-dark"> Recuerda que los niveles digimon son:Fresh, Baby, Rookie, Champion, Ultimate y Mega </div>
+    <div class="row">
+      {% for digi in digis %}
+      <div class = "col-6 col-sm-4 col-md-3">
+        <div class="card mt-4">
+          <img src="{{ digi.img }} " class="card-img-top" alt="...">
+          <div class="card-body">
+              <h5 class="card-title">{{digi.name}}</h5>
+            <p class="card-text">{{digi.level}}.</p>
+          <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Ver
+            </button>
+          </div>
+        </div>  
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+      <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function() {
+        $.get("https://digimon-api.vercel.app/api/digimon",function(datos) {
+          for(var i=0; datos.length>i; i++) {
+            $(".carousel-inner").append('<div class="carousel-item ' + (i===0 ? 'active':'') +'">'  +
+              '<img src=" ' + datos[i].img + '" class="d-block" alt="...">' +
+              '<button type="button" data-id="'+ i +'" class="sync btn btn-outline-danger mt-4"> Sincronizar </button>' +
+            '</div>');
+              
+          }
+          $(".sync").click(function() {
+            var $this = $(this);
+            var $id = parseInt($this.data("id")); // id es un numero entero
+
+            $.post("/digidesk/create", {
+              "name":datos[$id].name,
+              "level":datos[$id].level,
+              "img":datos[$id].img                
+            }, function(data) {
+                window.location.reload(); // para refrescar luego de cargar
+            });            
+          })
+        });
+      });   
+    </script>
+  </body>
+</html>
+
+
